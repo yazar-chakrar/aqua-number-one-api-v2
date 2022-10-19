@@ -11,7 +11,6 @@ const foodSchema = mongoose.Schema({
     },
     discription: {
         type: String,
-        required: true,
         minlength: 5,
         maxlength: 255
     },
@@ -29,7 +28,10 @@ const foodSchema = mongoose.Schema({
     },
     oldPrice: {
         type: Number,
-        min: 0
+        min: 0,
+        default: function() {
+            return this.price;
+        }
     },
     isAvaible: {
         type: Boolean,
@@ -41,12 +43,12 @@ const Food = mongoose.model('Foods', foodSchema);
 
 function validate(food){
     const schema = Joi.object({
-        name: Joi.string.min(5).max(50).required(),
-        category: Joi.string.min(5).max(50).required(),
-        discription: Joi.string.min(5).max(255),
-        price: Joi.number.min(0).required(),
-        oldPrice: Joi.number.min(0),
-        isAvaible: Joi.boolean
+        name: Joi.string().min(5).max(50).required(),
+        category: Joi.string().min(5).max(50).required(),
+        discription: Joi.string().min(5).max(255),
+        price: Joi.number().min(0).required(),
+        oldPrice: Joi.number().min(0),
+        isAvaible: Joi.boolean()
     });
     return schema.validate(food);
 }
