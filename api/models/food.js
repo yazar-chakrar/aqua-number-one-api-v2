@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const foodSchema = mongoose.Schema({
+    image:{
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 255
+    },
     name: {
         type: String,
         required: true,
@@ -44,6 +50,7 @@ const Food = mongoose.model('Foods', foodSchema);
 function validate(food){
     const schema = Joi.object({
         name: Joi.string().min(5).max(50).required(),
+        //image: Joi.any().required(),
         category: Joi.string().min(5).max(50).required(),
         discription: Joi.string().min(5).max(255),
         price: Joi.number().min(0).required(),

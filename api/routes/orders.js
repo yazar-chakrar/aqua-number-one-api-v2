@@ -43,4 +43,16 @@ route.post('/', async (req, res) => {
     res.send(await order.save());
 });
 
+route.get('/:id', async(req, res) => {
+    const orders = await Order.find({'user._id': req.params.id});
+    if (!orders) return res.status(404).send('The Order with given user id wasn t found');
+    res.send(orders);
+});
+
+route.delete('/:id', async(req, res) => {
+    const orders = await Order.findByIdAndRemove(req.params.id);
+    if (!orders) return res.status(404).send('The Order with given id wasn t found');
+    res.send(orders);
+});
+
 module.exports = route;

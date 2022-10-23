@@ -2,17 +2,20 @@
 const express = require('express');
 const route = express.Router();
 const {Food, validate} = require('../models/food');
+const upload = require('../middleware/upload');
 
 route.get('/', async (req, res) =>{
     const foods = await Food.find().sort('category');
     res.send(foods);
 });
 
-route.post('/', async (req, res) =>{
+route.post('/', upload.single('image'), async (req, res) =>{
+    console.log(req.file);
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
     let food = new Food({
+        image: req.file.path,
         name: req.body.name,
         discription: req.body.discription,
         category: req.body.category,
